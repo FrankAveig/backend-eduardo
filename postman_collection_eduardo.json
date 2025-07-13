@@ -1,0 +1,587 @@
+{
+  "info": {
+    "_postman_id": "85e1f39d-3267-4afa-a3b8-61d5d0cbf5ea",
+    "name": "API Eduardo v4.0 - Complete Collection",
+    "description": "Colección completa para API de Eduardo con rutas en inglés, control de estados activo/inactivo, carga de archivos con formdata, y automatización de tokens. Incluye endpoints para activar/desactivar certificaciones, empresas y relaciones client-certification.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url", "value": "http://localhost:3066/api", "type": "string" },
+    { "key": "token", "value": "", "type": "string" },
+    { "key": "token_cliente", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "🔐 Authentication",
+      "item": [
+        {
+          "name": "Login User (Admin/Reviewer)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set(\"token\", jsonData.data.token);",
+                  "    console.log(\"✅ Token de admin guardado: \" + jsonData.data.token.substring(0, 20) + \"...\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"correo\": \"admin@fabrima.com\",\n  \"contrasenia\": \"admin123\"\n}" },
+            "url": { "raw": "{{base_url}}/auth/login", "host": ["{{base_url}}"], "path": ["auth", "login"] }
+          }
+        },
+        {
+          "name": "Login Client",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "if (jsonData.data && jsonData.data.token) {",
+                  "    pm.environment.set(\"token_cliente\", jsonData.data.token);",
+                  "    console.log(\"✅ Token de cliente guardado: \" + jsonData.data.token.substring(0, 20) + \"...\");",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"correo\": \"cliente@ejemplo.com\",\n  \"contrasenia\": \"cliente123\"\n}" },
+            "url": { "raw": "{{base_url}}/auth/login/client", "host": ["{{base_url}}"], "path": ["auth", "login", "client"] }
+          }
+        }
+      ]
+    },
+    {
+      "name": "👥 Roles",
+      "item": [
+        { "name": "Get all roles", "request": { "method": "GET", "url": { "raw": "{{base_url}}/roles", "host": ["{{base_url}}"], "path": ["roles"] } } },
+        { "name": "Get role by ID", "request": { "method": "GET", "url": { "raw": "{{base_url}}/roles/1", "host": ["{{base_url}}"], "path": ["roles", "1"] } } },
+        { 
+          "name": "Create role", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_rol\": \"new_role\"\n}" }, 
+            "url": { "raw": "{{base_url}}/roles", "host": ["{{base_url}}"], "path": ["roles"] } 
+          } 
+        },
+        { 
+          "name": "Update role", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_rol\": \"updated_role\"\n}" }, 
+            "url": { "raw": "{{base_url}}/roles/1", "host": ["{{base_url}}"], "path": ["roles", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete role", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/roles/1", "host": ["{{base_url}}"], "path": ["roles", "1"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "👤 Users",
+      "item": [
+        { 
+          "name": "Get all users", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/users", "host": ["{{base_url}}"], "path": ["users"] } 
+          } 
+        },
+        { 
+          "name": "Get user by ID", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] } 
+          } 
+        },
+        { 
+          "name": "Create user", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_completo\": \"New User\",\n  \"correo\": \"user@fabrima.com\",\n  \"contrasenia\": \"password123\",\n  \"rol_id\": 1\n}" }, 
+            "url": { "raw": "{{base_url}}/users", "host": ["{{base_url}}"], "path": ["users"] } 
+          } 
+        },
+        { 
+          "name": "Update user", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_completo\": \"Updated User\",\n  \"correo\": \"user@fabrima.com\",\n  \"rol_id\": 2\n}" }, 
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete user", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/users/1", "host": ["{{base_url}}"], "path": ["users", "1"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "🏢 Companies",
+      "item": [
+        { 
+          "name": "Get all companies", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/companies", "host": ["{{base_url}}"], "path": ["companies"] } 
+          } 
+        },
+        { 
+          "name": "Get company by ID", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/companies/1", "host": ["{{base_url}}"], "path": ["companies", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get clients by company", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/companies/1/clients", "host": ["{{base_url}}"], "path": ["companies", "1", "clients"] } 
+          } 
+        },
+        { 
+          "name": "Create company", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"New Company\",\n  \"tipo\": \"Type\",\n  \"activa\": true\n}" }, 
+            "url": { "raw": "{{base_url}}/companies", "host": ["{{base_url}}"], "path": ["companies"] } 
+          } 
+        },
+        { 
+          "name": "Update company", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre\": \"Updated Company\",\n  \"tipo\": \"Type\",\n  \"activa\": true\n}" }, 
+            "url": { "raw": "{{base_url}}/companies/1", "host": ["{{base_url}}"], "path": ["companies", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete company", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/companies/1", "host": ["{{base_url}}"], "path": ["companies", "1"] } 
+          } 
+        },
+        { 
+          "name": "Toggle company active status", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PATCH", 
+            "url": { "raw": "{{base_url}}/companies/1/toggle-active", "host": ["{{base_url}}"], "path": ["companies", "1", "toggle-active"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "📜 Certifications",
+      "item": [
+        { "name": "Get all certifications", "request": { "method": "GET", "url": { "raw": "{{base_url}}/certifications", "host": ["{{base_url}}"], "path": ["certifications"] } } },
+        { 
+          "name": "Get certification by ID", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/certifications/1", "host": ["{{base_url}}"], "path": ["certifications", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get certifications by company", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/certifications/company/1", "host": ["{{base_url}}"], "path": ["certifications", "company", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get videos by certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/certifications/1/videos", "host": ["{{base_url}}"], "path": ["certifications", "1", "videos"] } 
+          } 
+        },
+        { 
+          "name": "Get clients by certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/certifications/1/clients", "host": ["{{base_url}}"], "path": ["certifications", "1", "clients"] } 
+          } 
+        },
+        { 
+          "name": "Create certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "certification_photo", "type": "file", "src": [] }, { "key": "nombre_certificacion", "value": "New Certification", "type": "text" }, { "key": "empresa_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/certifications", "host": ["{{base_url}}"], "path": ["certifications"] } 
+          } 
+        },
+        { 
+          "name": "Update certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "certification_photo", "type": "file", "src": [] }, { "key": "nombre_certificacion", "value": "Updated Certification", "type": "text" }, { "key": "empresa_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/certifications/1", "host": ["{{base_url}}"], "path": ["certifications", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/certifications/1", "host": ["{{base_url}}"], "path": ["certifications", "1"] } 
+          } 
+        },
+        { 
+          "name": "Toggle certification active status", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PATCH", 
+            "url": { "raw": "{{base_url}}/certifications/1/toggle-active", "host": ["{{base_url}}"], "path": ["certifications", "1", "toggle-active"] } 
+          } 
+        },
+        { 
+          "name": "Add client to certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"cliente_id\": 1\n}" }, 
+            "url": { "raw": "{{base_url}}/certifications/1/clients", "host": ["{{base_url}}"], "path": ["certifications", "1", "clients"] } 
+          } 
+        },
+        { 
+          "name": "Remove client from certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/certifications/1/clients/1", "host": ["{{base_url}}"], "path": ["certifications", "1", "clients", "1"] } 
+          } 
+        },
+        { 
+          "name": "Toggle client-certification relationship", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PATCH", 
+            "url": { "raw": "{{base_url}}/certifications/1/clients/1/toggle-active", "host": ["{{base_url}}"], "path": ["certifications", "1", "clients", "1", "toggle-active"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "🎥 Videos",
+      "item": [
+        { 
+          "name": "Get all videos", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/videos", "host": ["{{base_url}}"], "path": ["videos"] } 
+          } 
+        },
+        { 
+          "name": "Get video by ID", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/videos/1", "host": ["{{base_url}}"], "path": ["videos", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get videos by certification", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/videos/certification/1", "host": ["{{base_url}}"], "path": ["videos", "certification", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get documents by video", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/videos/1/documents", "host": ["{{base_url}}"], "path": ["videos", "1", "documents"] } 
+          } 
+        },
+        { 
+          "name": "Get videos by active certification (client)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token_cliente}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/videos/active-certification/1", "host": ["{{base_url}}"], "path": ["videos", "active-certification", "1"] } 
+          } 
+        },
+        { 
+          "name": "Create video", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "video_file", "type": "file", "src": [] }, { "key": "video_name", "value": "New Video", "type": "text" }, { "key": "duration", "value": "120", "type": "text" }, { "key": "certification_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/videos", "host": ["{{base_url}}"], "path": ["videos"] } 
+          } 
+        },
+        { 
+          "name": "Update video", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "video_file", "type": "file", "src": [] }, { "key": "video_name", "value": "Updated Video", "type": "text" }, { "key": "duration", "value": "180", "type": "text" }, { "key": "certification_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/videos/1", "host": ["{{base_url}}"], "path": ["videos", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete video", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/videos/1", "host": ["{{base_url}}"], "path": ["videos", "1"] } 
+          } 
+        },
+        { 
+          "name": "Test video upload", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "test_video", "type": "file", "src": [] }] }, 
+            "url": { "raw": "{{base_url}}/videos/test/upload", "host": ["{{base_url}}"], "path": ["videos", "test", "upload"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "📄 Documents",
+      "item": [
+        { 
+          "name": "Get all documents", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/documents", "host": ["{{base_url}}"], "path": ["documents"] } 
+          } 
+        },
+        { 
+          "name": "Get document by ID", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/documents/1", "host": ["{{base_url}}"], "path": ["documents", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get documents by video", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/documents/video/1", "host": ["{{base_url}}"], "path": ["documents", "video", "1"] } 
+          } 
+        },
+        { 
+          "name": "Create document", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "document", "type": "file", "src": [] }, { "key": "document_name", "value": "New Document", "type": "text" }, { "key": "video_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/documents", "host": ["{{base_url}}"], "path": ["documents"] } 
+          } 
+        },
+        { 
+          "name": "Update document", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "document", "type": "file", "src": [] }, { "key": "document_name", "value": "Updated Document", "type": "text" }, { "key": "video_id", "value": "1", "type": "text" }] }, 
+            "url": { "raw": "{{base_url}}/documents/1", "host": ["{{base_url}}"], "path": ["documents", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete document", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/documents/1", "host": ["{{base_url}}"], "path": ["documents", "1"] } 
+          } 
+        },
+        { 
+          "name": "Test document upload", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [], 
+            "body": { "mode": "formdata", "formdata": [{ "key": "document", "type": "file", "src": [] }] }, 
+            "url": { "raw": "{{base_url}}/documents/test-upload", "host": ["{{base_url}}"], "path": ["documents", "test-upload"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "👤 Clients",
+      "item": [
+        { 
+          "name": "Get my companies (client)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token_cliente}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/clients/my-companies", "host": ["{{base_url}}"], "path": ["clients", "my-companies"] } 
+          } 
+        },
+        { 
+          "name": "Get my certifications (client)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token_cliente}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/clients/my-certifications", "host": ["{{base_url}}"], "path": ["clients", "my-certifications"] } 
+          } 
+        },
+        { 
+          "name": "Get my certification history (client)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token_cliente}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/clients/my-certification-history", "host": ["{{base_url}}"], "path": ["clients", "my-certification-history"] } 
+          } 
+        },
+        { 
+          "name": "Get my profile (client)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token_cliente}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/clients/my-profile", "host": ["{{base_url}}"], "path": ["clients", "my-profile"] } 
+          } 
+        }
+      ]
+    },
+    {
+      "name": "👥 Admin Clients",
+      "item": [
+        { 
+          "name": "Get all clients (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/admin/clients", "host": ["{{base_url}}"], "path": ["admin", "clients"] } 
+          } 
+        },
+        { 
+          "name": "Get client by ID (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/admin/clients/1", "host": ["{{base_url}}"], "path": ["admin", "clients", "1"] } 
+          } 
+        },
+        { 
+          "name": "Get companies by client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/admin/clients/1/companies", "host": ["{{base_url}}"], "path": ["admin", "clients", "1", "companies"] } 
+          } 
+        },
+        { 
+          "name": "Get certifications by client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "GET", 
+            "url": { "raw": "{{base_url}}/admin/clients/1/certifications", "host": ["{{base_url}}"], "path": ["admin", "clients", "1", "certifications"] } 
+          } 
+        },
+        { 
+          "name": "Create client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_completo\": \"New Client\",\n  \"correo\": \"client@example.com\",\n  \"contrasenia\": \"client123\",\n  \"identificacion\": \"12345678\",\n  \"tipo_identificacion\": \"DNI\",\n  \"estatus\": \"activo\"\n}" }, 
+            "url": { "raw": "{{base_url}}/admin/clients", "host": ["{{base_url}}"], "path": ["admin", "clients"] } 
+          } 
+        },
+        { 
+          "name": "Update client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "PUT", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"nombre_completo\": \"Updated Client\",\n  \"correo\": \"client@example.com\",\n  \"identificacion\": \"87654321\",\n  \"tipo_identificacion\": \"Pasaporte\",\n  \"estatus\": \"activo\"\n}" }, 
+            "url": { "raw": "{{base_url}}/admin/clients/1", "host": ["{{base_url}}"], "path": ["admin", "clients", "1"] } 
+          } 
+        },
+        { 
+          "name": "Delete client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/admin/clients/1", "host": ["{{base_url}}"], "path": ["admin", "clients", "1"] } 
+          } 
+        },
+        { 
+          "name": "Add company to client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "POST", 
+            "header": [{ "key": "Content-Type", "value": "application/json" }], 
+            "body": { "mode": "raw", "raw": "{\n  \"empresa_id\": 1\n}" }, 
+            "url": { "raw": "{{base_url}}/admin/clients/1/companies", "host": ["{{base_url}}"], "path": ["admin", "clients", "1", "companies"] } 
+          } 
+        },
+        { 
+          "name": "Remove company from client (admin)", 
+          "request": { 
+            "auth": { "type": "bearer", "bearer": [{ "key": "token", "value": "{{token}}", "type": "string" }] },
+            "method": "DELETE", 
+            "url": { "raw": "{{base_url}}/admin/clients/1/companies/1", "host": ["{{base_url}}"], "path": ["admin", "clients", "1", "companies", "1"] } 
+          } 
+        }
+      ]
+    }
+  ]
+} 

@@ -1,0 +1,12 @@
+const express = require('express');
+const router = express.Router();
+const clienteController = require('../controllers/cliente.controller');
+const { verifyToken, isClient } = require('../middleware/auth.middleware');
+
+// Routes for authenticated clients
+router.get('/my-companies', verifyToken, isClient, clienteController.getMyCompanies);
+router.get('/my-certifications', verifyToken, isClient, clienteController.getMyCertifications);
+router.get('/my-certification-history', verifyToken, isClient, clienteController.getAllMyCertifications);
+router.get('/my-profile', verifyToken, isClient, clienteController.getMyProfile);
+
+module.exports = router; 

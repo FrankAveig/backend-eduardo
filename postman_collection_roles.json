@@ -1,0 +1,1430 @@
+{
+  "info": {
+    "_postman_id": "85e1f39d-3267-4afa-a3b8-61d5d0cbf5ea",
+    "name": "API Fabrima",
+    "description": "Colección para API de Fabrima",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Roles",
+      "description": "Operaciones relacionadas con los roles de usuario",
+      "item": [
+        {
+          "name": "Obtener todos los roles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/roles",
+              "host": ["{{base_url}}"],
+              "path": ["roles"]
+            },
+            "description": "Obtiene todos los roles disponibles en el sistema"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener rol por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/roles/1",
+              "host": ["{{base_url}}"],
+              "path": ["roles", "1"]
+            },
+            "description": "Obtiene un rol específico por su ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_rol\": \"nuevo_rol\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/roles",
+              "host": ["{{base_url}}"],
+              "path": ["roles"]
+            },
+            "description": "Crea un nuevo rol en el sistema (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_rol\": \"rol_actualizado\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/roles/3",
+              "host": ["{{base_url}}"],
+              "path": ["roles", "3"]
+            },
+            "description": "Actualiza un rol existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar rol",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/roles/3",
+              "host": ["{{base_url}}"],
+              "path": ["roles", "3"]
+            },
+            "description": "Elimina un rol existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuarios",
+      "description": "Operaciones relacionadas con los usuarios administrativos",
+      "item": [
+        {
+          "name": "Obtener todos los usuarios",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            },
+            "description": "Obtiene todos los usuarios administrativos (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener usuario por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios/1",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "1"]
+            },
+            "description": "Obtiene un usuario específico por su ID (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Nuevo Usuario\",\n    \"correo\": \"usuario.nuevo@fabrima.com\",\n    \"contrasenia\": \"password123\",\n    \"rol_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios"]
+            },
+            "description": "Crea un nuevo usuario administrativo (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Usuario Actualizado\",\n    \"correo\": \"usuario.actualizado@fabrima.com\",\n    \"rol_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/usuarios/2",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "2"]
+            },
+            "description": "Actualiza un usuario existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar usuario",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/usuarios/3",
+              "host": ["{{base_url}}"],
+              "path": ["usuarios", "3"]
+            },
+            "description": "Elimina un usuario existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Empresas",
+      "description": "Operaciones relacionadas con las empresas",
+      "item": [
+        {
+          "name": "Obtener todas las empresas",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/empresas",
+              "host": ["{{base_url}}"],
+              "path": ["empresas"]
+            },
+            "description": "Obtiene todas las empresas registradas (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener todas las empresas (con filtros)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/empresas?limite=5&pagina=1&nombre=Empresa&tipo=Constructora",
+              "host": ["{{base_url}}"],
+              "path": ["empresas"],
+              "query": [
+                {
+                  "key": "limite",
+                  "value": "5"
+                },
+                {
+                  "key": "pagina",
+                  "value": "1"
+                },
+                {
+                  "key": "nombre",
+                  "value": "Empresa"
+                },
+                {
+                  "key": "tipo",
+                  "value": "Constructora"
+                }
+              ]
+            },
+            "description": "Obtiene empresas con paginación y filtros (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener empresa por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/empresas/1",
+              "host": ["{{base_url}}"],
+              "path": ["empresas", "1"]
+            },
+            "description": "Obtiene una empresa específica por su ID (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener clientes de una empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/empresas/1/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["empresas", "1", "clientes"]
+            },
+            "description": "Obtiene los clientes asociados a una empresa (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Nueva Empresa S.A.\",\n    \"tipo\": \"Constructora\",\n    \"activa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/empresas",
+              "host": ["{{base_url}}"],
+              "path": ["empresas"]
+            },
+            "description": "Crea una nueva empresa (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre\": \"Empresa Actualizada S.A.\",\n    \"tipo\": \"Consultora\",\n    \"activa\": true\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/empresas/2",
+              "host": ["{{base_url}}"],
+              "path": ["empresas", "2"]
+            },
+            "description": "Actualiza una empresa existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/empresas/3",
+              "host": ["{{base_url}}"],
+              "path": ["empresas", "3"]
+            },
+            "description": "Elimina una empresa existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Certificaciones",
+      "description": "Operaciones relacionadas con las certificaciones",
+      "item": [
+        {
+          "name": "Obtener todas las certificaciones",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones"]
+            },
+            "description": "Obtiene todas las certificaciones disponibles"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener certificación por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1"]
+            },
+            "description": "Obtiene una certificación específica por su ID (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener certificaciones por empresa",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/empresa/1",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "empresa", "1"]
+            },
+            "description": "Obtiene certificaciones asociadas a una empresa (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener videos de una certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1/videos",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1", "videos"]
+            },
+            "description": "Obtiene videos asociados a una certificación (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener clientes de una certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1", "clientes"]
+            },
+            "description": "Obtiene clientes asociados a una certificación (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_certificacion\": \"Nueva Certificación\",\n    \"foto_certificacion\": \"ruta/a/imagen.jpg\",\n    \"empresa_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/certificaciones",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones"]
+            },
+            "description": "Crea una nueva certificación (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_certificacion\": \"Certificación Actualizada\",\n    \"foto_certificacion\": \"ruta/actualizada/imagen.jpg\",\n    \"empresa_id\": 2\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1"]
+            },
+            "description": "Actualiza una certificación existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/2",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "2"]
+            },
+            "description": "Elimina una certificación existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Añadir cliente a certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"cliente_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1/clientes",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1", "clientes"]
+            },
+            "description": "Asigna un cliente a una certificación (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cliente de certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/certificaciones/1/clientes/2",
+              "host": ["{{base_url}}"],
+              "path": ["certificaciones", "1", "clientes", "2"]
+            },
+            "description": "Elimina un cliente de una certificación (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Videos",
+      "description": "Operaciones relacionadas con los videos",
+      "item": [
+        {
+          "name": "Obtener todos los videos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/videos",
+              "host": ["{{base_url}}"],
+              "path": ["videos"]
+            },
+            "description": "Obtiene todos los videos disponibles (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener video por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/videos/1",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "1"]
+            },
+            "description": "Obtiene un video específico por su ID (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener videos por certificación",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/videos/certification/1",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "certification", "1"]
+            },
+            "description": "Obtiene videos asociados a una certificación (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener documentos de un video",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/videos/1/documents",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "1", "documents"]
+            },
+            "description": "Obtiene documentos asociados a un video (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear video",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_video\": \"Nuevo Video\",\n    \"ruta_video\": \"ruta/al/video.mp4\",\n    \"duracion\": \"00:15:30\",\n    \"certificacion_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/videos",
+              "host": ["{{base_url}}"],
+              "path": ["videos"]
+            },
+            "description": "Crea un nuevo video (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar video",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_video\": \"Video Actualizado\",\n    \"ruta_video\": \"ruta/actualizada/video.mp4\",\n    \"duracion\": \"00:20:45\",\n    \"certificacion_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/videos/1",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "1"]
+            },
+            "description": "Actualiza un video existente (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar video",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/videos/2",
+              "host": ["{{base_url}}"],
+              "path": ["videos", "2"]
+            },
+            "description": "Elimina un video existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documentos",
+      "description": "Operaciones relacionadas con los documentos",
+      "item": [
+        {
+          "name": "Obtener todos los documentos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documentos",
+              "host": ["{{base_url}}"],
+              "path": ["documentos"]
+            },
+            "description": "Obtiene todos los documentos disponibles (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener documento por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documentos/1",
+              "host": ["{{base_url}}"],
+              "path": ["documentos", "1"]
+            },
+            "description": "Obtiene un documento específico por su ID (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener documentos por video",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documentos/video/1",
+              "host": ["{{base_url}}"],
+              "path": ["documentos", "video", "1"]
+            },
+            "description": "Obtiene documentos asociados a un video (requiere autenticación)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear documento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_documento\": \"Nuevo Documento\",\n    \"ruta_documento\": \"ruta/al/documento.pdf\",\n    \"video_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/documentos",
+              "host": ["{{base_url}}"],
+              "path": ["documentos"]
+            },
+            "description": "Crea un nuevo documento (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar documento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_documento\": \"Documento Actualizado\",\n    \"ruta_documento\": \"ruta/actualizada/documento.pdf\",\n    \"video_id\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/documentos/1",
+              "host": ["{{base_url}}"],
+              "path": ["documentos", "1"]
+            },
+            "description": "Actualiza un documento existente (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar documento",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/documentos/2",
+              "host": ["{{base_url}}"],
+              "path": ["documentos", "2"]
+            },
+            "description": "Elimina un documento existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Clientes",
+      "description": "Operaciones relacionadas con los clientes",
+      "item": [
+        {
+          "name": "Obtener todos los clientes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes-admin",
+              "host": ["{{base_url}}"],
+              "path": ["clientes-admin"]
+            },
+            "description": "Obtiene todos los clientes (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener cliente por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes-admin/1",
+              "host": ["{{base_url}}"],
+              "path": ["clientes-admin", "1"]
+            },
+            "description": "Obtiene un cliente específico por su ID (requiere autenticación de admin o revisor)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener mi perfil (cliente)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_cliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes/perfil",
+              "host": ["{{base_url}}"],
+              "path": ["clientes", "perfil"]
+            },
+            "description": "Obtiene el perfil del cliente autenticado (requiere autenticación de cliente)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener mis empresas (cliente)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_cliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes/mis-empresas",
+              "host": ["{{base_url}}"],
+              "path": ["clientes", "mis-empresas"]
+            },
+            "description": "Obtiene las empresas del cliente autenticado (requiere autenticación de cliente)"
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener mis certificaciones (cliente)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token_cliente}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes/mis-certificaciones",
+              "host": ["{{base_url}}"],
+              "path": ["clientes", "mis-certificaciones"]
+            },
+            "description": "Obtiene las certificaciones del cliente autenticado (requiere autenticación de cliente)"
+          },
+          "response": []
+        },
+        {
+          "name": "Crear cliente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Nuevo Cliente\",\n    \"correo\": \"nuevo.cliente@ejemplo.com\",\n    \"contrasenia\": \"cliente123\",\n    \"identificacion\": \"12345678\",\n    \"tipo_identificacion\": \"DNI\",\n    \"estatus\": \"activo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/clientes-admin",
+              "host": ["{{base_url}}"],
+              "path": ["clientes-admin"]
+            },
+            "description": "Crea un nuevo cliente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar cliente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"nombre_completo\": \"Cliente Actualizado\",\n    \"correo\": \"cliente.actualizado@ejemplo.com\",\n    \"identificacion\": \"87654321\",\n    \"tipo_identificacion\": \"Pasaporte\",\n    \"estatus\": \"activo\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/clientes-admin/1",
+              "host": ["{{base_url}}"],
+              "path": ["clientes-admin", "1"]
+            },
+            "description": "Actualiza un cliente existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar cliente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/clientes-admin/2",
+              "host": ["{{base_url}}"],
+              "path": ["clientes-admin", "2"]
+            },
+            "description": "Elimina un cliente existente (requiere autenticación de administrador)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Autenticación",
+      "description": "Operaciones relacionadas con la autenticación de usuarios",
+      "item": [
+        {
+          "name": "Login Usuario (Admin/Revisor)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"token\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"correo\": \"admin@fabrima.com\",\n    \"contrasenia\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login"]
+            },
+            "description": "Autenticación para usuarios administradores o revisores"
+          },
+          "response": []
+        },
+        {
+          "name": "Login Cliente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var jsonData = JSON.parse(responseBody);",
+                  "if (jsonData.token) {",
+                  "    pm.environment.set(\"token_cliente\", jsonData.token);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"correo\": \"cliente@ejemplo.com\",\n    \"contrasenia\": \"cliente123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login/cliente",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "login", "cliente"]
+            },
+            "description": "Autenticación para clientes"
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api",
+      "type": "string"
+    }
+  ]
+} 
