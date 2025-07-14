@@ -4,9 +4,9 @@ const Usuario = require('../models/usuario.model');
 const getAllUsers = async (req, res) => {
   try {
     // Parámetros de paginación y filtrado
-    const limite = parseInt(req.query.limite) || 10;
-    const pagina = parseInt(req.query.pagina) || 1;
-    const offset = (pagina - 1) * limite;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
     const nombre = req.query.nombre;
     const correo = req.query.correo;
     const rol_id = req.query.rol_id;
@@ -17,11 +17,11 @@ const getAllUsers = async (req, res) => {
     if (correo) filtros.correo = correo;
     if (rol_id) filtros.rol_id = rol_id;
     
-    const totalRegistros = await Usuario.count(filtros);
-    const totalPaginas = Math.ceil(totalRegistros / limite);
+    const total = await Usuario.count(filtros);
+    const totalPages = Math.ceil(total / limit);
     
     // Obtener los datos paginados y filtrados
-    const usuarios = await Usuario.getAll(limite, offset, filtros);
+    const usuarios = await Usuario.getAll(limit, offset, filtros);
     
     // Ocultar contraseñas en la respuesta
     const usuariosSinPassword = usuarios.map(u => {
@@ -36,10 +36,10 @@ const getAllUsers = async (req, res) => {
       data: {
         users: usuariosSinPassword,
         pagination: {
-          total: totalRegistros,
-          totalPages: totalPaginas,
-          currentPage: pagina,
-          limit: limite
+          total,
+          totalPages,
+          currentPage: page,
+          limit
         }
       }
     });

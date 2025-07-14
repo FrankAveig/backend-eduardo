@@ -21,6 +21,9 @@ router.post('/', verifyToken, isAdmin, upload.single('certification_photo'), cer
 router.put('/:id', verifyToken, isAdmin, upload.single('certification_photo'), certificationController.updateCertification);
 router.delete('/:id', verifyToken, isAdmin, certificationController.deleteCertification);
 
+// Activar/desactivar certificación (solo admin)
+router.patch('/:id/toggle-active', verifyToken, isAdmin, certificationController.toggleCertificationActive);
+
 // Client-certification relationship management - administrators only
 router.post('/:id/clients', verifyToken, isAdmin, certificationController.addClientToCertification);
 router.delete('/:certificationId/clients/:clientId', verifyToken, isAdmin, certificationController.removeClientFromCertification);

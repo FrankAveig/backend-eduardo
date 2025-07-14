@@ -4,9 +4,9 @@ const Empresa = require('../models/empresa.model');
 const getAllCompanies = async (req, res) => {
   try {
     // Parámetros de paginación y filtrado
-    const limite = parseInt(req.query.limite) || 10;
-    const pagina = parseInt(req.query.pagina) || 1;
-    const offset = (pagina - 1) * limite;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
     const tipo = req.query.tipo;
     const nombre = req.query.nombre;
     
@@ -15,30 +15,30 @@ const getAllCompanies = async (req, res) => {
     if (tipo) filtros.tipo = tipo;
     if (nombre) filtros.nombre = nombre;
     
-    const totalRegistros = await Empresa.count(filtros);
-    const totalPaginas = Math.ceil(totalRegistros / limite);
+    const total = await Empresa.count(filtros);
+    const totalPages = Math.ceil(total / limit);
     
     // Obtener los datos paginados y filtrados
-    const empresas = await Empresa.getAll(limite, offset, filtros);
+    const empresas = await Empresa.getAll(limit, offset, filtros);
     
     // Respuesta estructurada
     res.json({
-      titulo: "Consulta de empresas exitosa",
+      title: "Successful companies query",
       statusCode: 200,
       data: {
-        empresas,
-        paginacion: {
-          total: totalRegistros,
-          totalPaginas,
-          paginaActual: pagina,
-          limite
+        companies: empresas,
+        pagination: {
+          total,
+          totalPages,
+          currentPage: page,
+          limit
         }
       }
     });
   } catch (error) {
     console.error('Error al obtener empresas:', error);
     res.status(500).json({ 
-      titulo: "Error al obtener empresas",
+      title: "Error retrieving companies",
       statusCode: 500,
       error: error.message 
     });

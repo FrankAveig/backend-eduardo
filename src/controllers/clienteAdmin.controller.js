@@ -1,12 +1,13 @@
 const Cliente = require('../models/cliente.model');
+const Certificacion = require('../models/certificacion.model');
 
 // Obtener todos los clientes con paginación y filtros (para admin y revisores)
 const getAllClients = async (req, res) => {
   try {
     // Parámetros de paginación y filtrado
-    const limite = parseInt(req.query.limite) || 10;
-    const pagina = parseInt(req.query.pagina) || 1;
-    const offset = (pagina - 1) * limite;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
     const estatus = req.query.estatus;
     const nombre = req.query.nombre;
     const correo = req.query.correo;
@@ -18,10 +19,10 @@ const getAllClients = async (req, res) => {
     if (correo) filtros.correo = correo;
     
     const totalRegistros = await Cliente.count(filtros);
-    const totalPaginas = Math.ceil(totalRegistros / limite);
+    const totalPaginas = Math.ceil(totalRegistros / limit);
     
     // Obtener los datos paginados y filtrados
-    const clientes = await Cliente.getAll(limite, offset, filtros);
+    const clientes = await Cliente.getAll(limit, offset, filtros);
     
     // Ocultar contraseñas en la respuesta y obtener empresas para cada cliente
     const clientesConEmpresas = await Promise.all(clientes.map(async c => {
@@ -45,8 +46,8 @@ const getAllClients = async (req, res) => {
         pagination: {
           total: totalRegistros,
           totalPages: totalPaginas,
-          currentPage: pagina,
-          limit: limite
+          currentPage: page,
+          limit: limit
         }
       }
     });
@@ -79,13 +80,16 @@ const getClientById = async (req, res) => {
     
     // Obtener empresas asociadas al cliente
     const empresas = await Cliente.getEmpresasByClienteId(id);
+    // Obtener certificaciones asociadas al cliente
+    const certificaciones = await Cliente.getCertificacionesByClienteId(id);
     
     res.json({
       title: "Client retrieved successfully",
       statusCode: 200,
       data: {
         ...clienteSinPassword,
-        empresas: empresas || []
+        empresas: empresas || [],
+        certificaciones: certificaciones || []
       }
     });
   } catch (error) {
@@ -477,6 +481,98 @@ const removeCompanyFromClient = async (req, res) => {
   }
 };
 
+// Asignar una certificación a un cliente
+const addCertificationToClient = async (req, res) => {
+  try {
+    const clienteId = req.params.id;
+    const { certificacion_id } = req.body;
+
+    if (!certificacion_id) {
+      return res.status(400).json({
+        title: "Datos incompletos",
+        statusCode: 400,
+        message: "Falta el campo certificacion_id"
+      });
+    }
+
+    // Verificar existencia de cliente y certificación
+    const cliente = await Cliente.getById(clienteId);
+    if (!cliente) {
+      return res.status(404).json({ title: "Cliente no encontrado", statusCode: 404 });
+    }
+    const certificacion = await Certificacion.getById(certificacion_id);
+    if (!certificacion) {
+      return res.status(404).json({ title: "Certificación no encontrada", statusCode: 404 });
+    }
+
+    // Insertar relación
+    const result = await Certificacion.addClienteToCertificacion(certificacion_id, clienteId);
+
+    if (result.success) {
+      res.json({
+        title: "Certificación asignada correctamente",
+        statusCode: 200,
+        message: result.message || "Certificación asignada al cliente",
+        data: { clienteId, certificacion_id }
+      });
+    } else {
+      res.status(400).json({
+        title: "No se pudo asignar",
+        statusCode: 400,
+        message: "No se pudo asignar la certificación al cliente"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      title: "Error asignando certificación",
+      statusCode: 500,
+      error: error.message
+    });
+  }
+};
+
+// Quitar una certificación de un cliente
+const removeCertificationFromClient = async (req, res) => {
+  try {
+    const clienteId = req.params.clientId;
+    const certificacionId = req.params.certificationId;
+
+    // Verificar existencia de cliente y certificación
+    const cliente = await Cliente.getById(clienteId);
+    if (!cliente) {
+      return res.status(404).json({ title: "Cliente no encontrado", statusCode: 404 });
+    }
+    const certificacion = await Certificacion.getById(certificacionId);
+    if (!certificacion) {
+      return res.status(404).json({ title: "Certificación no encontrada", statusCode: 404 });
+    }
+
+    // Eliminar relación
+    const deleted = await Certificacion.removeClienteFromCertificacion(certificacionId, clienteId);
+
+    if (deleted) {
+      res.json({
+        title: "Certificación removida correctamente",
+        statusCode: 200,
+        message: "Certificación removida del cliente",
+        data: { clienteId, certificacionId }
+      });
+    } else {
+      res.status(400).json({
+        title: "No se pudo remover",
+        statusCode: 400,
+        message: "No se pudo remover la certificación del cliente"
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      title: "Error removiendo certificación",
+      statusCode: 500,
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getAllClients,
   getClientById,
@@ -486,5 +582,7 @@ module.exports = {
   getCompaniesByClientId,
   getCertificationsByClientId,
   addCompanyToClient,
-  removeCompanyFromClient
+  removeCompanyFromClient,
+  addCertificationToClient,
+  removeCertificationFromClient
 }; 

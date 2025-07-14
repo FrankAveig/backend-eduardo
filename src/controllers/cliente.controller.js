@@ -1,5 +1,6 @@
 const Cliente = require('../models/cliente.model');
 const Certificacion = require('../models/certificacion.model');
+const Video = require('../models/video.model');
 
 // Obtener empresas asociadas al cliente autenticado
 const getMyCompanies = async (req, res) => {
@@ -138,9 +139,61 @@ const getMyProfile = async (req, res) => {
   }
 };
 
+// Obtener todos los videos y documentos relacionados de una certificación para el cliente autenticado
+const getMyVideosAndDocumentsByCertification = async (req, res) => {
+  try {
+    const clienteId = req.usuario.id;
+    const certificationId = req.params.certificationId;
+
+    // Verificar si el cliente tiene acceso a la certificación
+    const certificaciones = await Cliente.getCertificacionesByClienteId(clienteId);
+    const tieneAcceso = certificaciones.some(c => c.id == certificationId);
+    if (!tieneAcceso) {
+      return res.status(403).json({
+        title: "Acceso denegado",
+        statusCode: 403,
+        message: 'No tienes acceso a esta certificación'
+      });
+    }
+
+    // Obtener los videos de la certificación
+    const videos = await Video.getByCertificacionId(certificationId);
+    // Para cada video, obtener sus documentos
+    const videosWithDocuments = await Promise.all(videos.map(async (video) => {
+      const documents = await Video.getDocumentosByVideoId(video.id);
+      return {
+        id: video.id,
+        video_name: video.nombre_video,
+        video_path: video.ruta_video,
+        duration: video.duracion,
+        certification_id: video.certificacion_id,
+        documents: documents || []
+      };
+    }));
+
+    res.json({
+      title: "Consulta de videos y documentos exitosa",
+      statusCode: 200,
+      data: {
+        certification_id: certificationId,
+        videos: videosWithDocuments,
+        total: videosWithDocuments.length
+      }
+    });
+  } catch (error) {
+    console.error(`Error al obtener videos y documentos para certificación ${req.params.certificationId}:`, error);
+    res.status(500).json({
+      title: "Error al obtener videos y documentos",
+      statusCode: 500,
+      error: error.message
+    });
+  }
+};
+
 module.exports = {
   getMyCompanies,
   getMyCertifications,
   getAllMyCertifications,
-  getMyProfile
+  getMyProfile,
+  getMyVideosAndDocumentsByCertification
 }; 

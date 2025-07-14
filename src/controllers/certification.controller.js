@@ -13,7 +13,8 @@ const transformCertificationToEnglish = (certification) => {
     certification_name: certification.nombre_certificacion,
     certification_photo: certification.foto_certificacion,
     company_id: certification.empresa_id,
-    company_name: certification.nombre_empresa
+    company_name: certification.nombre_empresa,
+    active: Boolean(certification.activa) // Devolver como booleano
   };
 };
 
@@ -579,6 +580,33 @@ const removeClientFromCertification = async (req, res) => {
   }
 };
 
+// Activar/desactivar una certificación
+const toggleCertificationActive = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await Certificacion.toggleActive(id);
+    if (result.success) {
+      res.json({
+        title: result.activa ? 'Certificación activada' : 'Certificación desactivada',
+        statusCode: 200,
+        active: result.activa,
+        message: result.message
+      });
+    } else {
+      res.status(404).json({
+        title: 'Certificación no encontrada',
+        statusCode: 404
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      title: 'Error al cambiar el estado de la certificación',
+      statusCode: 500,
+      error: error.message
+    });
+  }
+};
+
 // Test FTP connection
 const testFtpConnection = async (req, res) => {
   const client = new Client();
@@ -789,5 +817,6 @@ module.exports = {
   addClientToCertification,
   removeClientFromCertification,
   testFtpConnection,
-  testFileUpload
+  testFileUpload,
+  toggleCertificationActive
 }; 

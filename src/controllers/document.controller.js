@@ -5,14 +5,27 @@ const { uploadDocumentToFtp, deleteFromFtp } = require('../middleware/upload.mid
 // Get all documents
 const getAllDocuments = async (req, res) => {
   try {
-    const documents = await Documento.getAll();
+    // Parámetros de paginación y filtrado
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
+    // Aquí podrías agregar más filtros si lo deseas
+
+    const documents = await Documento.getAll(limit, offset);
+    const total = await Documento.count();
+    const totalPages = Math.ceil(total / limit);
     
     res.json({
       title: "Successful documents query",
       statusCode: 200,
       data: {
         documents,
-        total: documents.length
+        pagination: {
+          total,
+          totalPages,
+          currentPage: page,
+          limit
+        }
       }
     });
   } catch (error) {

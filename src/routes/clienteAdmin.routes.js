@@ -16,4 +16,9 @@ router.delete('/:id', verifyToken, isAdmin, clienteAdminController.deleteClient)
 router.post('/:id/companies', verifyToken, isAdmin, clienteAdminController.addCompanyToClient);
 router.delete('/:clientId/companies/:companyId', verifyToken, isAdmin, clienteAdminController.removeCompanyFromClient);
 
+// Asignar una certificación a un cliente
+router.post('/:id/certifications', verifyToken, isAdmin, clienteAdminController.addCertificationToClient);
+// Quitar una cerstificación de un cliente
+router.delete('/:clientId/certifications/:certificationId', verifyToken, isAdmin, clienteAdminController.removeCertificationFromClient);
+
 module.exports = router; 

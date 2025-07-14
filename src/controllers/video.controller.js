@@ -23,9 +23,9 @@ const transformVideoToEnglish = (video) => {
 const getAllVideos = async (req, res) => {
   try {
     // Parámetros de paginación y filtrado
-    const limite = parseInt(req.query.limite) || 10;
-    const pagina = parseInt(req.query.pagina) || 1;
-    const offset = (pagina - 1) * limite;
+    const limit = parseInt(req.query.limit) || 10;
+    const page = parseInt(req.query.page) || 1;
+    const offset = (page - 1) * limit;
     const nombre_video = req.query.nombre_video;
     const certificacion_id = req.query.certificacion_id;
     
@@ -36,10 +36,10 @@ const getAllVideos = async (req, res) => {
     
     // Obtener el total de registros para calcular total de páginas
     const totalRegistros = await Video.count(filtros);
-    const totalPaginas = Math.ceil(totalRegistros / limite);
+    const totalPaginas = Math.ceil(totalRegistros / limit);
     
     // Obtener los videos paginados y filtrados
-    const videos = await Video.getAll(limite, offset, filtros);
+    const videos = await Video.getAll(limit, offset, filtros);
     
     // Obtener documentos para cada video
     const videosWithDocuments = await Promise.all(videos.map(async (video) => {
@@ -59,8 +59,8 @@ const getAllVideos = async (req, res) => {
         pagination: {
           total: totalRegistros,
           totalPages: totalPaginas,
-          currentPage: pagina,
-          limit: limite
+          currentPage: page,
+          limit: limit
         }
       }
     });
@@ -90,11 +90,16 @@ const getVideoById = async (req, res) => {
     
     // Transformar video a formato en inglés
     const transformedVideo = transformVideoToEnglish(video);
+    // Obtener documentos relacionados
+    const documents = await Video.getDocumentosByVideoId(id);
     
     res.json({
       title: "Successful video query",
       statusCode: 200,
-      data: transformedVideo
+      data: {
+        ...transformedVideo,
+        documents: documents || []
+      }
     });
   } catch (error) {
     console.error(`Error retrieving video with id ${req.params.id}:`, error);
@@ -330,7 +335,7 @@ const updateVideo = async (req, res) => {
     
     // Si se especifica una certificación, verificar que exista
     let certification = null;
-    if (certification_id) {
+    if (certification_id !== undefined) {
       certification = await Certificacion.getById(certification_id);
       if (!certification) {
         return res.status(404).json({ 
@@ -386,14 +391,29 @@ const updateVideo = async (req, res) => {
     
     // Preparar objeto de actualización (mapear a nombres en español para el modelo)
     const updateData = {};
-    if (video_name) updateData.nombre_video = video_name;
-    if (video_path) updateData.ruta_video = video_path;
+    // Solo actualiza si el campo viene en el body
+    if (video_name !== undefined) updateData.nombre_video = video_name;
     if (duration !== undefined) updateData.duracion = duration;
-    if (certification_id) updateData.certificacion_id = certification_id;
-    
-    // Si se proporcionó una URL de video en lugar de un archivo
-    if (!video_path && req.body.video_path) {
+    if (certification_id !== undefined) updateData.certificacion_id = certification_id;
+    // Solo actualiza la ruta del video si se subió un archivo o si se manda video_path explícitamente y no vacío
+    if (video_path !== null && video_path !== undefined) {
+      updateData.ruta_video = video_path;
+    } else if (
+      req.body.video_path !== undefined &&
+      req.body.video_path !== null &&
+      typeof req.body.video_path === 'string' &&
+      req.body.video_path.trim() !== ''
+    ) {
       updateData.ruta_video = req.body.video_path;
+    }
+    
+    // Actualizar el video solo si hay campos a actualizar
+    if (Object.keys(updateData).length === 0) {
+      return res.status(400).json({
+        title: "No fields to update",
+        statusCode: 400,
+        message: 'No fields provided to update the video.'
+      });
     }
     
     // Actualizar el video
@@ -405,10 +425,16 @@ const updateVideo = async (req, res) => {
     // Transformar a formato en inglés para la respuesta
     const transformedVideo = transformVideoToEnglish(updatedVideo);
     
+    // Obtener documentos relacionados
+    const documents = await Video.getDocumentosByVideoId(id);
+    
     res.json({
       title: "Video updated successfully",
       statusCode: 200,
-      data: transformedVideo
+      data: {
+        ...transformedVideo,
+        documents: documents || []
+      }
     });
   } catch (error) {
     console.error(`Error updating video with id ${req.params.id}:`, error);

@@ -1,14 +1,25 @@
 const { pool } = require('../config/db');
 
 class Documento {
-  static async getAll() {
+  static async getAll(limit = 10, offset = 0) {
     try {
       const [rows] = await pool.query(`
         SELECT d.*, v.nombre_video
         FROM documentos d
         JOIN videos v ON d.video_id = v.id
-      `);
+        ORDER BY d.id DESC
+        LIMIT ? OFFSET ?
+      `, [limit, offset]);
       return rows;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async count() {
+    try {
+      const [result] = await pool.query(`SELECT COUNT(*) as total FROM documentos`);
+      return result[0].total;
     } catch (error) {
       throw error;
     }

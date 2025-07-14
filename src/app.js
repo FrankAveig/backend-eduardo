@@ -43,7 +43,7 @@ app.use('/api/admin/clients', clientAdminRoutes); // For client administration
 
 // Test route
 app.get('/', (req, res) => {
-  res.json({ message: 'Fabrimasa API working correctly' });
+  res.json({ message: 'Eduardo API working correctly' });
   db
 });
 
