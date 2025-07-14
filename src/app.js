@@ -16,15 +16,13 @@ const videoRoutes = require('./routes/video.routes');
 // Import database configuration
 const { testConnection } = require('./config/db');
 
-// Create Express application
+// Create Express app
 const app = express();
-const PORT = process.env.PORT || 4000;
 
 // Middleware
 app.use(cors());
 app.use(express.json());
 
-// Simple logging middleware
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
   next();
@@ -38,16 +36,14 @@ app.use('/api/companies', companyRoutes);
 app.use('/api/certifications', certificationRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/documents', documentRoutes);
-app.use('/api/clients', clientRoutes); // For authenticated clients
-app.use('/api/admin/clients', clientAdminRoutes); // For client administration
+app.use('/api/clients', clientRoutes);
+app.use('/api/admin/clients', clientAdminRoutes);
 
-// Test route
 app.get('/', (req, res) => {
   res.json({ message: 'Eduardo API working correctly' });
-  db
 });
 
-// 404 Not Found middleware
+// 404 handler
 app.use((req, res, next) => {
   res.status(404).json({
     title: "Route not found",
@@ -56,7 +52,7 @@ app.use((req, res, next) => {
   });
 });
 
-// Error handling
+// Error handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({
@@ -66,22 +62,5 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
-const startServer = async () => {
-  try {
-    // Test database connection
-    await testConnection();
-    
-    // Start server
-    app.listen(PORT, () => {
-      console.log(`Server running at http://localhost:${PORT}`);
-    });
-  } catch (error) {
-    console.error('Could not start server:', error);
-    process.exit(1);
-  }
-};
-
-startServer();
-
-module.exports = app; 
+// ✅ En lugar de app.listen(), simplemente exportas app:
+module.exports = app;
