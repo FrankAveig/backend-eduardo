@@ -7,7 +7,7 @@ require('dotenv').config();
 
 // Asegurarse de que los directorios temporales existen
 // Usar path.resolve para asegurar una ruta absoluta correcta
-const uploadsDir = path.resolve(__dirname, '../uploads');
+/* const uploadsDir = path.resolve(__dirname, '../uploads');
 const videoUploadsDir = path.resolve(__dirname, '../uploads/videos');
 const documentsUploadsDir = path.resolve(__dirname, '../uploads/documents');
 
@@ -21,7 +21,7 @@ if (!fs.existsSync(videoUploadsDir)) {
 
 if (!fs.existsSync(documentsUploadsDir)) {
   fs.mkdirSync(documentsUploadsDir, { recursive: true });
-}
+} */
 
 // Filtro para validar tipos de archivos - imágenes
 const imageFilter = (req, file, cb) => {
