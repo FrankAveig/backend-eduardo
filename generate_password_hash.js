@@ -35,6 +35,8 @@ VALUES ('Nombre Usuario', 'correo@ejemplo.com', '${hash}', 1);`);
   }
 }
 
+generateHash('Admin123#');
+
 // Obtener la contraseña desde los argumentos de línea de comandos o pedirla
 async function main() {
   let password = process.argv[2]; // Tomar la contraseña desde los argumentos

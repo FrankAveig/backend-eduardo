@@ -147,12 +147,21 @@ const getMyVideosAndDocumentsByCertification = async (req, res) => {
 
     // Verificar si el cliente tiene acceso a la certificación
     const certificaciones = await Cliente.getCertificacionesByClienteId(clienteId);
-    const tieneAcceso = certificaciones.some(c => c.id == certificationId);
-    if (!tieneAcceso) {
+    const certificacion = certificaciones.find(c => c.id == certificationId);
+    if (!certificacion) {
       return res.status(403).json({
         title: "Acceso denegado",
         statusCode: 403,
         message: 'No tienes acceso a esta certificación'
+      });
+    }
+
+    // Verificar si la certificación está activa
+    if (!certificacion.activa) {
+      return res.status(403).json({
+        title: "Certificación inactiva",
+        statusCode: 403,
+        message: 'Esta certificación se encuentra inactiva en este momento.'
       });
     }
 
